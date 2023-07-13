@@ -1,46 +1,44 @@
 import {describe, expect, it} from "vitest"
 import {data} from "./data";
-import {filterByPattern} from "./app";
+import {DataProcessor} from './DataProcessor';
 
 
 describe('app', () => {
     describe('filter', () => {
-        it('should return true', () => {
-            expect(true).toBe(true);
-        });
+        let processor = new DataProcessor(data);
 
-        it('should return the whole object if there is no filter', () => {
-            const filteredData = filterByPattern(null);
+        it.each([
+            [null, data],
+            ["tailed", expectedDataWithPatternTailed],
+            ["easel", expectedDataWithPatternEasel],
+            ["ry", expectedGivenResult],
+        ])('should return the expected result for the pattern %s', (pattern, expected) => {
+            const filteredData = processor.filterByPattern(pattern);
 
-            expect(filteredData).toEqual(data);
+            expect(filteredData).toEqual(expected);
         })
 
-        it('should return the the filtered object with pattern "tailed"', () => {
-            const filteredData = filterByPattern("tailed");
+        it.each([
+            ["taILed", null],
+            ["taiiiled", null],
+            ["", data],
+            [" ", null],
+        ])('should return null for the pattern %s', (pattern, expected) => {
+            const filteredData = processor.filterByPattern(pattern);
 
-            expect(filteredData).toEqual(expectedDataWithPatternTailed);
+            expect(filteredData).toEqual(expected);
         })
+    })
 
-        it('should return null for a miss capitalize pattern object with pattern "taILed"', () => {
-            const filteredData = filterByPattern("taILed");
+    describe('count', () => {
+        it('should return the expected result with a lighted object', () => {
+            const simpleProcessor = new DataProcessor(simpleDataToCount);
+            const countedData = simpleProcessor.countElements();
 
-            expect(filteredData).toBeNull();
-        })
-
-        it('should return null if there is no matching pattern "taiiiled"', () => {
-            const filteredData = filterByPattern("taiiiled");
-
-            expect(filteredData).toBeNull();
-        })
-
-        it('should return the the filtered object with pattern "easel"', () => {
-            const filteredData = filterByPattern("easel");
-
-            expect(filteredData).toEqual(expectedDataWithPatternEasel);
+            expect(countedData).toEqual(expectedDataCounted);
         })
     })
 })
-
 
 const expectedDataWithPatternTailed = [
     {
@@ -64,18 +62,110 @@ const expectedDataWithPatternTailed = [
                 },
             ]
     },
-]
+];
+
 
 const expectedDataWithPatternEasel = [
     {
         name: 'Satanwi',
         people: [
             {
-                name: 'Elmer Kinoshita' ,
+                name: 'Elmer Kinoshita',
                 animals: [
                     {name: 'Weasel'},
                 ]
             }
         ]
     }
-]
+];
+
+const expectedGivenResult = [
+    {
+        name: 'Uzuzozne',
+        people: [
+            {
+                name: 'Lillie Abbott',
+                animals: [
+                    {
+                        name: 'John Dory'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        name: 'Satanwi',
+        people: [
+            {
+                name: 'Anthony Bruno',
+                animals: [
+                    {
+                        name: 'Oryx'
+                    }
+                ]
+            }
+        ]
+    }
+];
+
+const simpleDataToCount = [
+    {
+        name: 'Tohabdal',
+        people:
+            [{
+                name: 'Effie Houghton',
+                animals:
+                    [{name: 'Ring-tailed Lemur'},
+                        {name: 'Fly'},]
+            }]
+    },
+    {
+        name: 'Uzuzozne',
+        people:
+            [
+                {
+                    name: 'Lillie Abbott',
+                    animals:
+                        [{name: 'Henkel\'s Leaf-tailed Gecko'},
+                            {name: 'Fly'},
+                            {name: 'Mouse'},]
+                },
+                {
+                    name: 'Lillie Abbott',
+                    animals:
+                        [{name: 'Henkel\'s Leaf-tailed Gecko'},]
+                },
+            ]
+    },
+];
+
+const expectedDataCounted =  [
+    {
+        name: 'Tohabdal [1]',
+        people:
+            [{
+                name: 'Effie Houghton [2]',
+                animals:
+                    [{name: 'Ring-tailed Lemur'},
+                        {name: 'Fly'},]
+            }]
+    },
+    {
+        name: 'Uzuzozne [2]',
+        people:
+            [
+                {
+                    name: 'Lillie Abbott [3]',
+                    animals:
+                        [{name: 'Henkel\'s Leaf-tailed Gecko'},
+                            {name: 'Fly'},
+                            {name: 'Mouse'},]
+                },
+                {
+                    name: 'Lillie Abbott [1]',
+                    animals:
+                        [{name: 'Henkel\'s Leaf-tailed Gecko'},]
+                },
+            ]
+    },
+];

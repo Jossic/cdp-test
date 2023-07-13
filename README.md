@@ -13,7 +13,7 @@ Details:
 Sample of running the command, and its output:
 
 ```shell script
-$ node app.js --filter=ry
+$ node DataProcessor.js --filter=ry
 [
   {
     name: 'Uzuzozne',
@@ -51,7 +51,7 @@ The next goal is to print the counts of People and Animals by counting the numbe
 Sample of running the command, and its output:
 
 ```shell script
-node app.js --count
+node DataProcessor.js --count
 [ { name: 'Dillauti [5]',
     people:
      [ { name: 'Winifred Graham [6]',
