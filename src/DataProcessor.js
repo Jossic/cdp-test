@@ -1,77 +1,18 @@
-export class DataProcessor {
-    constructor(data) {
-        this.data = data;
-    }
-
-    filterByPattern(pattern) {
-        if (!pattern) {
-            return this.data;
-        }
-
-        if (typeof pattern !== 'string' || !pattern.trim()) {
-            return null;
-        }
-
-        const filteredData = this.data
-            .map(country => {
-                const filteredPeople = country.people
-                    .map(person => {
-                        const filteredAnimals = person.animals
-                            .filter(animal => animal.name.includes(pattern));
-
-                        if (filteredAnimals.length > 0) {
-                            return {
-                                ...person,
-                                animals: filteredAnimals
-                            };
-                        }
-                    })
-                    .filter(Boolean);
-
-                if (filteredPeople.length > 0) {
-                    return {
-                        ...country,
-                        people: filteredPeople
-                    };
-                }
-            })
-            .filter(Boolean);
-
-        if (filteredData.length === 0) {
-            return null;
-        }
-
-        return filteredData
-    }
+import {data} from "./data.js";
+import {Processor} from "./Processor.js";
 
 
-    countElements() {
-        return this.data
-            .map(country => {
-                const numberOfPersons = country.people.length;
+const args = process.argv.slice(2);
+const command = args[0];
 
-                const countedPeople = country.people
-                    .map(person => {
-                        const numberOfAnimals = person.animals.length;
-                        const appendedName = `${person.name} [${numberOfAnimals}]`;
+const processor = new Processor(data);
 
-                        const countedAnimals = person.animals
-                            .map(animal => {
-                                return {
-                                    name: animal.name
-                                };
-                            });
-
-                        return {
-                            name: appendedName,
-                            animals: countedAnimals
-                        };
-                    });
-
-                return {
-                    name: `${country.name} [${numberOfPersons}]`,
-                    people: countedPeople
-                };
-            });
-    }
+if (command.startsWith('--filter')) {
+    const index = command.indexOf("=");
+    const pattern = command.substring(index + 1);
+    console.log(JSON.stringify(processor.filterByPattern(pattern), null, 2));
+} else if (command === '--count') {
+    console.log(JSON.stringify(processor.countElements(), null, 2));
+} else {
+    console.log('Invalid command. Please use --filter or --count.');
 }

@@ -1,4 +1,4 @@
-const data = [{
+export const data = [{
   name: 'Dillauti',
   people:
     [{
@@ -367,8 +367,4 @@ const data = [{
               {name: 'Oryx'}]
         }]
   }
-]
-
-module.exports = {
-  data
-}
+];

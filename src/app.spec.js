@@ -1,11 +1,11 @@
 import {describe, expect, it} from "vitest"
 import {data} from "./data";
-import {DataProcessor} from './DataProcessor';
+import {Processor} from './Processor.js';
 
 
 describe('app', () => {
     describe('filter', () => {
-        let processor = new DataProcessor(data);
+        const processor = new Processor(data);
 
         it.each([
             [null, data],
@@ -32,7 +32,7 @@ describe('app', () => {
 
     describe('count', () => {
         it('should return the expected result with a lighted object', () => {
-            const simpleProcessor = new DataProcessor(simpleDataToCount);
+            const simpleProcessor = new Processor(simpleDataToCount);
             const countedData = simpleProcessor.countElements();
 
             expect(countedData).toEqual(expectedDataCounted);
