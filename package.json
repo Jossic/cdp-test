@@ -1,0 +1,13 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "vitest --watch"
+  },
+  "devDependencies": {
+    "vitest": "^0.33.0"
+  },
+  "author": "Jossic"
+}
