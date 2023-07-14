@@ -1,46 +1,5 @@
-import {describe, expect, it} from "vitest"
-import {data} from "./data";
-import {Processor} from './Processor.js';
 
-
-describe('app', () => {
-    describe('filter', () => {
-        const processor = new Processor(data);
-
-        it.each([
-            [null, data],
-            ["tailed", expectedDataWithPatternTailed],
-            ["easel", expectedDataWithPatternEasel],
-            ["ry", expectedGivenResult],
-        ])('should return the expected result for the pattern %s', (pattern, expected) => {
-            const filteredData = processor.filterByPattern(pattern);
-
-            expect(filteredData).toEqual(expected);
-        })
-
-        it.each([
-            ["taILed", null],
-            ["taiiiled", null],
-            ["", data],
-            [" ", null],
-        ])('should return null for the pattern %s', (pattern, expected) => {
-            const filteredData = processor.filterByPattern(pattern);
-
-            expect(filteredData).toEqual(expected);
-        })
-    })
-
-    describe('count', () => {
-        it('should return the expected result with a lighted object', () => {
-            const simpleProcessor = new Processor(simpleDataToCount);
-            const countedData = simpleProcessor.countElements();
-
-            expect(countedData).toEqual(expectedDataCounted);
-        })
-    })
-})
-
-const expectedDataWithPatternTailed = [
+export const expectedDataWithPatternTailed = [
     {
         name: 'Tohabdal',
         people:
@@ -65,7 +24,7 @@ const expectedDataWithPatternTailed = [
 ];
 
 
-const expectedDataWithPatternEasel = [
+export const expectedDataWithPatternEasel = [
     {
         name: 'Satanwi',
         people: [
@@ -79,7 +38,7 @@ const expectedDataWithPatternEasel = [
     }
 ];
 
-const expectedGivenResult = [
+export const expectedGivenResult = [
     {
         name: 'Uzuzozne',
         people: [
@@ -108,7 +67,7 @@ const expectedGivenResult = [
     }
 ];
 
-const simpleDataToCount = [
+export const simpleDataToCount = [
     {
         name: 'Tohabdal',
         people:
@@ -139,7 +98,7 @@ const simpleDataToCount = [
     },
 ];
 
-const expectedDataCounted =  [
+export const expectedDataCounted =  [
     {
         name: 'Tohabdal [1]',
         people:
