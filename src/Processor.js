@@ -4,45 +4,27 @@ export class Processor {
     }
 
     filterByPattern(pattern) {
-        if (!pattern) {
-            return this.data;
-        }
+        if (!pattern) return this.data;
 
-        if (typeof pattern !== 'string' || !pattern.trim()) {
-            return null;
-        }
+        if (typeof pattern !== 'string' || !pattern.trim()) return null;
 
-        const filteredData = this.data
-            .map(country => {
-                const filteredPeople = country.people
-                    .map(person => {
-                        const filteredAnimals = person.animals
-                            .filter(animal => animal.name.includes(pattern));
+        const filteredCountries = this.data.reduce((accumulatedCountries, currentCountry) => {
+            const filteredPeople = currentCountry.people.reduce((accumulatedPeople, currentPerson) => {
+                const filteredAnimals = currentPerson.animals.filter(animal => animal.name.includes(pattern));
 
-                        if (filteredAnimals.length > 0) {
-                            return {
-                                ...person,
-                                animals: filteredAnimals
-                            };
-                        }
-                    })
-                    .filter(Boolean);
+                return filteredAnimals.length > 0
+                    ? [...accumulatedPeople, { ...currentPerson, animals: filteredAnimals }]
+                    : accumulatedPeople;
+            }, []);
 
-                if (filteredPeople.length > 0) {
-                    return {
-                        ...country,
-                        people: filteredPeople
-                    };
-                }
-            })
-            .filter(Boolean);
+            return filteredPeople.length > 0
+                ? [...accumulatedCountries, { ...currentCountry, people: filteredPeople }]
+                : accumulatedCountries;
+        }, []);
 
-        if (filteredData.length === 0) {
-            return null;
-        }
-
-        return filteredData
+        return filteredCountries.length === 0 ? null : filteredCountries;
     }
+
 
 
     countElements() {
