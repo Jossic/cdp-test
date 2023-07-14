@@ -25,35 +25,17 @@ export class Processor {
         return filteredCountries.length === 0 ? null : filteredCountries;
     }
 
-
-
     countElements() {
-        return this.data
-            .map(country => {
-                const numberOfPersons = country.people.length;
+        return this.data.map(country => {
+            const peopleCounts = country.people.map(person => ({
+                name: `${person.name} [${person.animals.length}]`,
+                animals: person.animals.map(animal => ({ name: animal.name })),
+            }));
 
-                const countedPeople = country.people
-                    .map(person => {
-                        const numberOfAnimals = person.animals.length;
-                        const appendedName = `${person.name} [${numberOfAnimals}]`;
-
-                        const countedAnimals = person.animals
-                            .map(animal => {
-                                return {
-                                    name: animal.name
-                                };
-                            });
-
-                        return {
-                            name: appendedName,
-                            animals: countedAnimals
-                        };
-                    });
-
-                return {
-                    name: `${country.name} [${numberOfPersons}]`,
-                    people: countedPeople
-                };
-            });
+            return {
+                name: `${country.name} [${peopleCounts.length}]`,
+                people: peopleCounts
+            };
+        });
     }
 }
